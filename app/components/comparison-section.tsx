@@ -182,28 +182,29 @@ function ScoreBadge({ score }: { score: string }) {
      switch (score) {
           case "excellent":
                return (
-                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-700 border border-green-200">
-                         <Check className="h-4 w-4 mr-1 text-green-500" />{" "}
+                    <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-green-50 text-green-700 border border-green-200">
+                         <Check className="h-3 w-3 mr-1" />
                          Excellent
                     </span>
                );
           case "good":
                return (
-                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-700 border border-blue-200">
-                         <Check className="h-4 w-4 mr-1 text-blue-500" /> Good
+                    <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
+                         <Check className="h-3 w-3 mr-1" />
+                         Good
                     </span>
                );
           case "average":
                return (
-                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700 border border-yellow-200">
-                         <span className="h-3 w-3 rounded-full bg-yellow-400 mr-1 inline-block" />{" "}
+                    <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-yellow-50 text-yellow-700 border border-yellow-200">
+                         <span className="h-2 w-2 rounded-full bg-yellow-400 mr-1" />
                          Average
                     </span>
                );
           case "poor":
                return (
-                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-red-100 text-red-700 border border-red-200">
-                         <span className="h-3 w-3 rounded-full bg-red-400 mr-1 inline-block" />{" "}
+                    <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-red-50 text-red-700 border border-red-200">
+                         <span className="h-2 w-2 rounded-full bg-red-400 mr-1" />
                          Poor
                     </span>
                );
@@ -214,235 +215,180 @@ function ScoreBadge({ score }: { score: string }) {
 
 export default function ComparisonSection() {
      return (
-          <section className="relative py-20 bg-gray-50 overflow-hidden">
-               <div className="container px-4 mx-auto relative z-10">
+          <section className="py-20 bg-gray-50">
+               <div className="container mx-auto px-4">
                     <div className="text-center mb-16">
-                         <h2 className="text-3xl md:text-4xl font-extrabold mb-4">
+                         <h2 className="text-3xl md:text-4xl font-bold mb-4">
                               Why Choose{" "}
-                              <span className="bg-gradient-to-r from-indigo-500 to-blue-500 bg-clip-text text-transparent">
-                                   HFD?
-                              </span>
+                              <span className="text-blue-600">HFD?</span>
                          </h2>
-                         <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                              Compare our services with other platforms and
-                              hiring models to make an informed decision.
+                         <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+                              Compare our services with other platforms and hiring models to make an informed decision.
                          </p>
                     </div>
 
                     {/* HFD vs Competitors Table */}
-                    <div className="overflow-x-auto rounded-2xl shadow-xl bg-white/90 mb-16">
-                         <table className="min-w-full divide-y divide-gray-200">
-                              <thead className="bg-gradient-to-r from-indigo-50 to-blue-50 sticky top-0 z-10">
-                                   <tr>
-                                        <th className="px-6 py-4 text-left text-lg font-bold text-gray-900 whitespace-nowrap rounded-tl-2xl">
-                                             <span className="flex items-center gap-2">
-                                                  <span>Aspect</span>
-                                             </span>
-                                        </th>
-                                        <th className="px-6 py-4 text-center text-lg font-bold text-green-700 whitespace-nowrap">
-                                             <span className="flex items-center justify-center gap-2">
-                                                  <img
-                                                       src="/images/hireflutterdev.png"
-                                                       alt="HFD"
-                                                       className="h-7 w-7 rounded-full"
-                                                  />
-                                                  HFD
-                                             </span>
-                                        </th>
-                                        <th className="px-6 py-4 text-center text-lg font-bold text-gray-700 whitespace-nowrap">
-                                             <span className="flex items-center justify-center gap-2">
-                                                  <Star className="h-5 w-5 text-yellow-500" />
-                                                  Toptal
-                                             </span>
-                                        </th>
-                                        <th className="px-6 py-4 text-center text-lg font-bold text-gray-700 whitespace-nowrap rounded-tr-2xl">
-                                             <span className="flex items-center justify-center gap-2">
-                                                  <Users className="h-5 w-5 text-blue-500" />
-                                                  Uplers
-                                             </span>
-                                        </th>
-                                   </tr>
-                              </thead>
-                              <tbody>
-                                   {comparisons.map((row, idx) => (
-                                        <tr
-                                             key={row.aspect}
-                                             className={clsx(
-                                                  "transition-colors",
-                                                  idx % 2 === 0
-                                                       ? "bg-white"
-                                                       : "bg-blue-50",
-                                                  "hover:bg-indigo-50"
-                                             )}
-                                        >
-                                             <td className="px-6 py-5 font-semibold text-gray-900 text-base whitespace-nowrap">
-                                                  <span className="flex items-center gap-2">
-                                                       <row.icon className="h-5 w-5 text-primary" />
-                                                       {row.aspect}
-                                                  </span>
-                                             </td>
-                                             <td className="px-6 py-5 text-center align-top">
-                                                  <div className="flex flex-col items-center gap-1">
-                                                       <ScoreBadge
-                                                            score={
-                                                                 row.hfd.score
-                                                            }
-                                                       />
-                                                       <span className="text-sm text-gray-600">
-                                                            {row.hfd.text}
+                    <div className="mb-16">
+                         <h3 className="text-2xl font-semibold mb-6 text-center">HFD vs Competitors</h3>
+                         <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                              <div className="overflow-x-auto">
+                                   <table className="w-full">
+                                        <thead>
+                                             <tr className="bg-gray-50 border-b border-gray-200">
+                                                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
+                                                       <span className="flex items-center gap-2">
+                                                            <span>Aspect</span>
                                                        </span>
-                                                  </div>
-                                             </td>
-                                             <td className="px-6 py-5 text-center align-top">
-                                                  <div className="flex flex-col items-center gap-1">
-                                                       <ScoreBadge
-                                                            score={
-                                                                 row.toptal
-                                                                      .score
-                                                            }
-                                                       />
-                                                       <span className="text-sm text-gray-600">
-                                                            {row.toptal.text}
+                                                  </th>
+                                                  <th className="px-6 py-4 text-center text-sm font-semibold text-green-700">
+                                                       <span className="flex items-center justify-center gap-2">
+                                                            <img
+                                                                 src="/images/hireflutterdev.png"
+                                                                 alt="HFD"
+                                                                 className="h-6 w-6 rounded-full"
+                                                            />
+                                                            HFD
                                                        </span>
-                                                  </div>
-                                             </td>
-                                             <td className="px-6 py-5 text-center align-top">
-                                                  <div className="flex flex-col items-center gap-1">
-                                                       <ScoreBadge
-                                                            score={
-                                                                 row.uplers
-                                                                      .score
-                                                            }
-                                                       />
-                                                       <span className="text-sm text-gray-600">
-                                                            {row.uplers.text}
+                                                  </th>
+                                                  <th className="px-6 py-4 text-center text-sm font-semibold text-gray-700">
+                                                       <span className="flex items-center justify-center gap-2">
+                                                            <Star className="h-4 w-4 text-yellow-500" />
+                                                            Toptal
                                                        </span>
-                                                  </div>
-                                             </td>
-                                        </tr>
-                                   ))}
-                              </tbody>
-                         </table>
+                                                  </th>
+                                                  <th className="px-6 py-4 text-center text-sm font-semibold text-gray-700">
+                                                       <span className="flex items-center justify-center gap-2">
+                                                            <Users className="h-4 w-4 text-blue-500" />
+                                                            Uplers
+                                                       </span>
+                                                  </th>
+                                             </tr>
+                                        </thead>
+                                        <tbody className="divide-y divide-gray-200">
+                                             {comparisons.map((row, idx) => (
+                                                  <tr key={row.aspect} className="hover:bg-gray-50 transition-colors">
+                                                       <td className="px-6 py-4 text-sm font-medium text-gray-900">
+                                                            <span className="flex items-center gap-2">
+                                                                 <row.icon className="h-4 w-4 text-gray-500" />
+                                                                 {row.aspect}
+                                                            </span>
+                                                       </td>
+                                                       <td className="px-6 py-4 text-center">
+                                                            <div className="flex flex-col items-center gap-2">
+                                                                 <ScoreBadge score={row.hfd.score} />
+                                                                 <p className="text-xs text-gray-600 max-w-32">
+                                                                      {row.hfd.text}
+                                                                 </p>
+                                                            </div>
+                                                       </td>
+                                                       <td className="px-6 py-4 text-center">
+                                                            <div className="flex flex-col items-center gap-2">
+                                                                 <ScoreBadge score={row.toptal.score} />
+                                                                 <p className="text-xs text-gray-600 max-w-32">
+                                                                      {row.toptal.text}
+                                                                 </p>
+                                                            </div>
+                                                       </td>
+                                                       <td className="px-6 py-4 text-center">
+                                                            <div className="flex flex-col items-center gap-2">
+                                                                 <ScoreBadge score={row.uplers.score} />
+                                                                 <p className="text-xs text-gray-600 max-w-32">
+                                                                      {row.uplers.text}
+                                                                 </p>
+                                                            </div>
+                                                       </td>
+                                                  </tr>
+                                             ))}
+                                        </tbody>
+                                   </table>
+                              </div>
+                         </div>
                     </div>
 
                     {/* Hiring Models Table */}
-                    <div className="overflow-x-auto rounded-2xl shadow-xl bg-white/90">
-                         <table className="min-w-full divide-y divide-gray-200">
-                              <thead className="bg-gradient-to-r from-blue-50 to-indigo-50 sticky top-0 z-10">
-                                   <tr>
-                                        <th className="px-6 py-4 text-left text-lg font-bold text-gray-900 whitespace-nowrap rounded-tl-2xl">
-                                             <span className="flex items-center gap-2">
-                                                  <span>Factor</span>
-                                             </span>
-                                        </th>
-                                        <th className="px-6 py-4 text-center text-lg font-bold text-blue-700 whitespace-nowrap">
-                                             <span className="flex items-center justify-center gap-2">
-                                                  <Badge className="bg-blue-100 text-blue-800 border-blue-200">
-                                                       Dedicated
-                                                  </Badge>
-                                             </span>
-                                        </th>
-                                        <th className="px-6 py-4 text-center text-lg font-bold text-gray-700 whitespace-nowrap">
-                                             <span className="flex items-center justify-center gap-2">
-                                                  <Badge className="bg-gray-100 text-gray-800 border-gray-200">
-                                                       Freelancer
-                                                  </Badge>
-                                             </span>
-                                        </th>
-                                        <th className="px-6 py-4 text-center text-lg font-bold text-gray-700 whitespace-nowrap rounded-tr-2xl">
-                                             <span className="flex items-center justify-center gap-2">
-                                                  <Badge className="bg-purple-100 text-purple-800 border-purple-200">
-                                                       In-House
-                                                  </Badge>
-                                             </span>
-                                        </th>
-                                   </tr>
-                              </thead>
-                              <tbody>
-                                   {hiringModels.map((row, idx) => (
-                                        <tr
-                                             key={row.factor}
-                                             className={clsx(
-                                                  "transition-colors",
-                                                  idx % 2 === 0
-                                                       ? "bg-white"
-                                                       : "bg-blue-50",
-                                                  "hover:bg-indigo-50"
-                                             )}
-                                        >
-                                             <td className="px-6 py-5 font-semibold text-gray-900 text-base whitespace-nowrap">
-                                                  <span className="flex items-center gap-2">
-                                                       <row.icon className="h-5 w-5 text-primary" />
-                                                       {row.factor}
-                                                  </span>
-                                             </td>
-                                             <td className="px-6 py-5 text-center align-top">
-                                                  <div className="flex flex-col items-center gap-1">
-                                                       <ScoreBadge
-                                                            score={
-                                                                 row.dedicated
-                                                                      .score
-                                                            }
-                                                       />
-                                                       <span className="text-sm text-gray-600">
-                                                            {
-                                                                 row.dedicated
-                                                                      .value
-                                                            }
+                    <div>
+                         <h3 className="text-2xl font-semibold mb-6 text-center">Hiring Models Comparison</h3>
+                         <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                              <div className="overflow-x-auto">
+                                   <table className="w-full">
+                                        <thead>
+                                             <tr className="bg-gray-50 border-b border-gray-200">
+                                                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
+                                                       <span className="flex items-center gap-2">
+                                                            <span>Factor</span>
                                                        </span>
-                                                       <span className="text-xs text-gray-400">
-                                                            {
-                                                                 row.dedicated
-                                                                      .description
-                                                            }
+                                                  </th>
+                                                  <th className="px-6 py-4 text-center text-sm font-semibold text-blue-700">
+                                                       <span className="flex items-center justify-center gap-2">
+                                                            <Badge variant="secondary" className="bg-blue-100 text-blue-800">
+                                                                 Dedicated
+                                                            </Badge>
                                                        </span>
-                                                  </div>
-                                             </td>
-                                             <td className="px-6 py-5 text-center align-top">
-                                                  <div className="flex flex-col items-center gap-1">
-                                                       <ScoreBadge
-                                                            score={
-                                                                 row.freelancer
-                                                                      .score
-                                                            }
-                                                       />
-                                                       <span className="text-sm text-gray-600">
-                                                            {
-                                                                 row.freelancer
-                                                                      .value
-                                                            }
+                                                  </th>
+                                                  <th className="px-6 py-4 text-center text-sm font-semibold text-gray-700">
+                                                       <span className="flex items-center justify-center gap-2">
+                                                            <Badge variant="secondary" className="bg-gray-100 text-gray-800">
+                                                                 Freelancer
+                                                            </Badge>
                                                        </span>
-                                                       <span className="text-xs text-gray-400">
-                                                            {
-                                                                 row.freelancer
-                                                                      .description
-                                                            }
+                                                  </th>
+                                                  <th className="px-6 py-4 text-center text-sm font-semibold text-gray-700">
+                                                       <span className="flex items-center justify-center gap-2">
+                                                            <Badge variant="secondary" className="bg-purple-100 text-purple-800">
+                                                                 In-House
+                                                            </Badge>
                                                        </span>
-                                                  </div>
-                                             </td>
-                                             <td className="px-6 py-5 text-center align-top">
-                                                  <div className="flex flex-col items-center gap-1">
-                                                       <ScoreBadge
-                                                            score={
-                                                                 row.inhouse
-                                                                      .score
-                                                            }
-                                                       />
-                                                       <span className="text-sm text-gray-600">
-                                                            {row.inhouse.value}
-                                                       </span>
-                                                       <span className="text-xs text-gray-400">
-                                                            {
-                                                                 row.inhouse
-                                                                      .description
-                                                            }
-                                                       </span>
-                                                  </div>
-                                             </td>
-                                        </tr>
-                                   ))}
-                              </tbody>
-                         </table>
+                                                  </th>
+                                             </tr>
+                                        </thead>
+                                        <tbody className="divide-y divide-gray-200">
+                                             {hiringModels.map((row, idx) => (
+                                                  <tr key={row.factor} className="hover:bg-gray-50 transition-colors">
+                                                       <td className="px-6 py-4 text-sm font-medium text-gray-900">
+                                                            <span className="flex items-center gap-2">
+                                                                 <row.icon className="h-4 w-4 text-gray-500" />
+                                                                 {row.factor}
+                                                            </span>
+                                                       </td>
+                                                       <td className="px-6 py-4 text-center">
+                                                            <div className="flex flex-col items-center gap-2">
+                                                                 <ScoreBadge score={row.dedicated.score} />
+                                                                 <p className="text-xs font-medium text-gray-900">
+                                                                      {row.dedicated.value}
+                                                                 </p>
+                                                                 <p className="text-xs text-gray-500 max-w-32">
+                                                                      {row.dedicated.description}
+                                                                 </p>
+                                                            </div>
+                                                       </td>
+                                                       <td className="px-6 py-4 text-center">
+                                                            <div className="flex flex-col items-center gap-2">
+                                                                 <ScoreBadge score={row.freelancer.score} />
+                                                                 <p className="text-xs font-medium text-gray-900">
+                                                                      {row.freelancer.value}
+                                                                 </p>
+                                                                 <p className="text-xs text-gray-500 max-w-32">
+                                                                      {row.freelancer.description}
+                                                                 </p>
+                                                            </div>
+                                                       </td>
+                                                       <td className="px-6 py-4 text-center">
+                                                            <div className="flex flex-col items-center gap-2">
+                                                                 <ScoreBadge score={row.inhouse.score} />
+                                                                 <p className="text-xs font-medium text-gray-900">
+                                                                      {row.inhouse.value}
+                                                                 </p>
+                                                                 <p className="text-xs text-gray-500 max-w-32">
+                                                                      {row.inhouse.description}
+                                                                 </p>
+                                                            </div>
+                                                       </td>
+                                                  </tr>
+                                             ))}
+                                        </tbody>
+                                   </table>
+                              </div>
+                         </div>
                     </div>
                </div>
           </section>

@@ -25,8 +25,6 @@ interface BlogWrapperProps {
 export default function ModernBlogWrapper({ posts, search }: BlogWrapperProps) {
      const [selectedCategory, setSelectedCategory] = useState<string>("all");
 
-     // No dark mode effect; use default theme
-
      // Extract unique categories from posts
      const categories = [
           "all",
@@ -44,10 +42,10 @@ export default function ModernBlogWrapper({ posts, search }: BlogWrapperProps) {
           selectedCategory === "all"
                ? posts
                : posts.filter((post) =>
-                      post._embedded?.["wp:term"]?.[0]?.some(
-                           (term: any) => term.slug === selectedCategory
-                      )
-                 );
+                    post._embedded?.["wp:term"]?.[0]?.some(
+                         (term: any) => term.slug === selectedCategory
+                    )
+               );
 
      const stats = [
           { number: `${posts.length}+`, label: "Articles", icon: BookOpen },
@@ -57,18 +55,18 @@ export default function ModernBlogWrapper({ posts, search }: BlogWrapperProps) {
      ];
 
      return (
-          <div className="relative min-h-screen bg-background text-foreground">
+          <div className="relative min-h-screen bg-gray-50">
                {/* Main Content */}
                <main className="relative z-10">
                     {/* Hero Section */}
-                    <section className="relative py-20 overflow-hidden">
+                    <section className="relative py-20 overflow-hidden bg-white">
                          {/* Background Elements */}
                          <div className="absolute inset-0">
                               <motion.div
                                    className="absolute -top-40 -right-40 w-80 h-80 rounded-full"
                                    style={{
                                         background:
-                                             "radial-gradient(circle, rgba(56,189,248,0.1) 0%, transparent 70%)",
+                                             "radial-gradient(circle, rgba(59,130,246,0.1) 0%, transparent 70%)",
                                    }}
                                    animate={{
                                         scale: [1, 1.2, 1],
@@ -109,20 +107,20 @@ export default function ModernBlogWrapper({ posts, search }: BlogWrapperProps) {
                                              duration: 0.6,
                                              delay: 0.2,
                                         }}
-                                        className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-glow-primary/10 border border-glow-primary/20 text-glow-primary text-sm font-medium mb-6"
+                                        className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-sm font-medium mb-6"
                                    >
                                         <BookOpen className="w-4 h-4" />
                                         <span>Latest Insights & Articles</span>
                                    </motion.div>
 
-                                   <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-primary mb-6">
+                                   <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6">
                                         Development{" "}
-                                        <span className="text-blue-500">
+                                        <span className="text-blue-600">
                                              Insights
                                         </span>
                                    </h1>
 
-                                   <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+                                   <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
                                         Discover the latest trends, best
                                         practices, and expert insights in
                                         Flutter development, Dart patterns, and
@@ -139,13 +137,13 @@ export default function ModernBlogWrapper({ posts, search }: BlogWrapperProps) {
                                         >
                                              <div className="relative mb-4">
                                                   <div className="inline-flex p-3 rounded-xl bg-blue-100 border border-blue-200 group-hover:border-blue-400 transition-colors">
-                                                       <stat.icon className="w-6 h-6 text-blue-500" />
+                                                       <stat.icon className="w-6 h-6 text-blue-600" />
                                                   </div>
                                              </div>
-                                             <div className="text-2xl sm:text-3xl font-bold text-primary mb-2">
+                                             <div className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
                                                   {stat.number}
                                              </div>
-                                             <div className="text-muted-foreground text-sm font-medium">
+                                             <div className="text-gray-600 text-sm font-medium">
                                                   {stat.label}
                                              </div>
                                         </div>
@@ -155,7 +153,7 @@ export default function ModernBlogWrapper({ posts, search }: BlogWrapperProps) {
                     </section>
 
                     {/* Search and Filter Section */}
-                    <section className="py-12 bg-blue-50/60">
+                    <section className="py-12 bg-white border-b border-gray-200">
                          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                               <motion.div
                                    initial={{ opacity: 0, y: 30 }}
@@ -173,7 +171,7 @@ export default function ModernBlogWrapper({ posts, search }: BlogWrapperProps) {
 
                                    {/* Category Filter */}
                                    <div className="flex items-center gap-4">
-                                        <div className="flex items-center gap-2 text-slate-300">
+                                        <div className="flex items-center gap-2 text-gray-500">
                                              <Filter className="w-4 h-4" />
                                              <span className="text-sm font-medium">
                                                   Filter:
@@ -196,23 +194,22 @@ export default function ModernBlogWrapper({ posts, search }: BlogWrapperProps) {
                                                                       category
                                                                  )
                                                             }
-                                                            className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-300 cursor-pointer ${
-                                                                 selectedCategory ===
-                                                                 category
-                                                                      ? "bg-blue-500 text-white shadow"
-                                                                      : "bg-white text-blue-500 border border-blue-200 hover:bg-blue-100"
-                                                            }`}
+                                                            className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-300 cursor-pointer ${selectedCategory ===
+                                                                      category
+                                                                      ? "bg-blue-600 text-white shadow-md"
+                                                                      : "bg-gray-100 text-gray-700 border border-gray-200 hover:bg-gray-200"
+                                                                 }`}
                                                        >
                                                             {category === "all"
                                                                  ? "All"
                                                                  : category
-                                                                        .charAt(
-                                                                             0
-                                                                        )
-                                                                        .toUpperCase() +
-                                                                   category.slice(
-                                                                        1
-                                                                   )}
+                                                                      .charAt(
+                                                                           0
+                                                                      )
+                                                                      .toUpperCase() +
+                                                                 category.slice(
+                                                                      1
+                                                                 )}
                                                        </motion.button>
                                                   ))}
                                         </div>
@@ -222,7 +219,7 @@ export default function ModernBlogWrapper({ posts, search }: BlogWrapperProps) {
                     </section>
 
                     {/* Blog Posts Grid */}
-                    <section className="py-20">
+                    <section className="py-20 bg-gray-50">
                          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                               {filteredPosts.length > 0 ? (
                                    <motion.div
@@ -257,13 +254,13 @@ export default function ModernBlogWrapper({ posts, search }: BlogWrapperProps) {
                                    <div className="text-center py-16">
                                         <div className="relative mb-8">
                                              <div className="inline-flex p-6 rounded-full bg-blue-100 border border-blue-200">
-                                                  <Search className="w-12 h-12 text-blue-500" />
+                                                  <Search className="w-12 h-12 text-blue-600" />
                                              </div>
                                         </div>
-                                        <h3 className="text-2xl font-bold text-primary mb-4">
+                                        <h3 className="text-2xl font-bold text-gray-900 mb-4">
                                              No articles found
                                         </h3>
-                                        <p className="text-muted-foreground max-w-md mx-auto">
+                                        <p className="text-gray-600 max-w-md mx-auto">
                                              We couldn't find any articles
                                              matching your search criteria. Try
                                              adjusting your filters or search

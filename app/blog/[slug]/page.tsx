@@ -56,7 +56,7 @@ async function getBlogPost(slug: string): Promise<BlogPost | null> {
 
           const readingTime = Math.ceil(
                post.content.rendered.replace(/<[^>]*>/g, "").split(" ").length /
-                    200
+               200
           );
 
           return {
@@ -83,8 +83,7 @@ async function getBlogPost(slug: string): Promise<BlogPost | null> {
 
                if (error.name === "WordPressAPIError") {
                     console.error(
-                         `WordPress API Error - status: ${
-                              (error as any).status
+                         `WordPress API Error - status: ${(error as any).status
                          }, endpoint: ${(error as any).endpoint}`
                     );
                }

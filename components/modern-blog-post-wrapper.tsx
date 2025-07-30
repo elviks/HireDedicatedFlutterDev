@@ -285,11 +285,11 @@ export function ModernBlogPostWrapper({ post }: ModernBlogPostWrapperProps) {
                          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                               <div className="relative bg-white rounded-2xl border border-blue-100 p-8 shadow">
                                    <h2 className="text-2xl font-bold text-blue-900 mb-4">
-                                        Need Expert Next.js Development?
+                                        Need ExpertFlutter Development?
                                    </h2>
                                    <p className="text-gray-500 mb-6 max-w-2xl mx-auto">
-                                        Our team of skilled Next.js developers
-                                        can help you build modern, scalable web
+                                        Our team of skilled Flutter developers
+                                        can help you build modern, scalable mobile
                                         applications. Get in touch to discuss
                                         your project.
                                    </p>
