@@ -13,22 +13,22 @@ const nextConfig = {
     return [
       {
         source: '/blog/:path*',
-        destination: 'https://hirededicatedflutterdeveloper.com/wp/:path*',
+        destination: 'https://www.hirededicatedflutterdeveloper.com/wp/:path*',
         permanent: false,
       },
       {
         source: '/admin/:slug*',
-        destination: 'https://hirededicatedflutterdeveloper.com/wp-admin/:slug*',
+        destination: 'https://www.hirededicatedflutterdeveloper.com/wp-admin/:slug*',
         permanent: false,
       },
       {
         source: '/wp-admin/:slug*',
-        destination: 'https://hirededicatedflutterdeveloper.com/wp-admin/:slug*',
+        destination: 'https://www.hirededicatedflutterdeveloper.com/wp-admin/:slug*',
         permanent: false,
       },
       {
         source: '/wp-content/:path*',
-        destination: 'https://hirededicatedflutterdeveloper.com/wp-content/:path*',
+        destination: 'https://www.hirededicatedflutterdeveloper.com/wp-content/:path*',
         permanent: false,
       },
     ]
