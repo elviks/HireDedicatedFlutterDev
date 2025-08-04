@@ -14,7 +14,7 @@ services:
     restart: unless-stopped
     environment:
       - NODE_ENV=production
-      - WORDPRESS_API_URL=http://wordpress:80/wp-json/wp/v2
+      - WORDPRESS_API_URL=https://hirededicatedflutterdeveloper.com/cms/wp-json/wp/v2
     labels:
       - "coolify.managed=true"
       - "coolify.type=application"
@@ -77,8 +77,6 @@ services:
     image: nginx:alpine
     container_name: hireflutter-nginx
     restart: unless-stopped
-    ports:
-      - "80:80"
     volumes:
       - ./nginx/coolify-nginx.conf:/etc/nginx/nginx.conf
       - ./nginx/coolify-default.conf:/etc/nginx/conf.d/default.conf
