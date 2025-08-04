@@ -8,30 +8,12 @@ const nextConfig = {
   },
   images: {
     unoptimized: true,
+    domains: ['hirededicatedflutterdeveloper.com'],
   },
-  async redirects() {
-    return [
-      {
-        source: '/blog/:path*',
-        destination: 'https://www.hirededicatedflutterdeveloper.com/wp/:path*',
-        permanent: false,
-      },
-      {
-        source: '/admin/:slug*',
-        destination: 'https://www.hirededicatedflutterdeveloper.com/wp-admin/:slug*',
-        permanent: false,
-      },
-      {
-        source: '/wp-admin/:slug*',
-        destination: 'https://www.hirededicatedflutterdeveloper.com/wp-admin/:slug*',
-        permanent: false,
-      },
-      {
-        source: '/wp-content/:path*',
-        destination: 'https://www.hirededicatedflutterdeveloper.com/wp-content/:path*',
-        permanent: false,
-      },
-    ]
+  output: 'standalone',
+  // Remove redirects as they'll be handled by nginx reverse proxy
+  env: {
+    WORDPRESS_API_URL: process.env.WORDPRESS_API_URL || 'https://hirededicatedflutterdeveloper.com/cms/wp-json/wp/v2',
   },
 }
 
