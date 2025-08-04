@@ -93,7 +93,7 @@ Coolify (SSL Termination + Load Balancer)
     ↓
 Docker Containers:
 ├── Nginx (Reverse Proxy)
-│   ├── / → Next.js App (Port 3000)
+│   ├── / → Next.js App (Port 3008)
 │   ├── /cms/ → WordPress (Port 80)
 │   └── /cms/wp-admin/ → WordPress Admin
 ├── Next.js Application (Standalone Build)

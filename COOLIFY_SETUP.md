@@ -70,7 +70,7 @@ Once deployed:
 
 ### Application Structure
 ```
-├── nextjs-app (Port: 3000)
+├── nextjs-app (Port: 3008)
 ├── wordpress (Port: 80)
 ├── mysql (Port: 3306)
 └── nginx (Port: 80) - Main entry point

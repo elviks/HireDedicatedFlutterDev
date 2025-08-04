@@ -270,7 +270,7 @@ docker-compose exec -i mysql mysql -u root -p wordpress < backup_file.sql
 docker-compose -f docker-compose.yml up -d
 
 # Access services
-# Next.js: http://localhost:3000
+# Next.js: http://localhost:3008
 # WordPress: http://localhost/cms
 # phpMyAdmin: http://localhost:8080
 ```
