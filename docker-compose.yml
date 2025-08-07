@@ -6,7 +6,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: nextjs-app
+    container_name: nextjs-flutter-hire
     restart: unless-stopped
     networks:
       - traefik-network
@@ -16,7 +16,7 @@ services:
       - "traefik.http.routers.nextjs.rule=Host(`hirededicatedflutterdeveloper.com`)"
       - "traefik.http.routers.nextjs.entrypoints=websecure"
       - "traefik.http.routers.nextjs.tls.certresolver=letsencrypt"
-      - "traefik.http.services.nextjs.loadbalancer.server.port=3000"
+      - "traefik.http.services.nextjs.loadbalancer.server.port=3010"
       - "traefik.docker.network=traefik-network"
       # HTTP to HTTPS redirect
       - "traefik.http.routers.nextjs-http.rule=Host(`hirededicatedflutterdeveloper.com`)"
@@ -27,7 +27,7 @@ services:
   # WordPress
   wordpress:
     image: wordpress:6.4-apache
-    container_name: wordpress-cms
+    container_name: wordpress-flutter-hire
     restart: unless-stopped
     environment:
       WORDPRESS_DB_HOST: mysql:3306
@@ -60,7 +60,7 @@ services:
   # MySQL Database
   mysql:
     image: mysql:8.0
-    container_name: mysql-db
+    container_name: mysql-flutter-hire
     restart: unless-stopped
     environment:
       MYSQL_DATABASE: wordpress
