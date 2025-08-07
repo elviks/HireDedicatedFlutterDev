@@ -9,26 +9,28 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  // Enable standalone output for Docker
+  output: 'standalone',
   async redirects() {
     return [
       {
         source: '/blog/:path*',
-        destination: 'https://www.hirededicatedflutterdeveloper.com/wp/:path*',
+        destination: '/cms/:path*',
         permanent: false,
       },
       {
         source: '/admin/:slug*',
-        destination: 'https://www.hirededicatedflutterdeveloper.com/wp-admin/:slug*',
+        destination: '/cms/wp-admin/:slug*',
         permanent: false,
       },
       {
         source: '/wp-admin/:slug*',
-        destination: 'https://www.hirededicatedflutterdeveloper.com/wp-admin/:slug*',
+        destination: '/cms/wp-admin/:slug*',
         permanent: false,
       },
       {
         source: '/wp-content/:path*',
-        destination: 'https://www.hirededicatedflutterdeveloper.com/wp-content/:path*',
+        destination: '/cms/wp-content/:path*',
         permanent: false,
       },
     ]
