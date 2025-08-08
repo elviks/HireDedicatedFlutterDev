@@ -1,0 +1,92 @@
+version: '3.8'
+
+services:
+  # Next.js Application
+  nextjs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nextjs-flutter-hire
+    restart: unless-stopped
+    networks:
+      - coolify
+    labels:
+      - "traefik.enable=true"
+      # HTTP router (redirects to HTTPS)
+      - "traefik.http.routers.nextjs-http.rule=Host(`hirededicatedflutterdeveloper.com`)"
+      - "traefik.http.routers.nextjs-http.entrypoints=http"
+      - "traefik.http.routers.nextjs-http.middlewares=nextjs-redirect"
+      - "traefik.http.middlewares.nextjs-redirect.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.nextjs-redirect.redirectscheme.permanent=true"
+      
+      # HTTPS router (main router)
+      - "traefik.http.routers.nextjs-https.rule=Host(`hirededicatedflutterdeveloper.com`)"
+      - "traefik.http.routers.nextjs-https.entrypoints=https"
+      - "traefik.http.routers.nextjs-https.tls=true"
+      - "traefik.http.routers.nextjs-https.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.nextjs-https.service=nextjs"
+      - "traefik.http.services.nextjs.loadbalancer.server.port=3010"
+      - "traefik.docker.network=coolify"
+
+  # WordPress
+  wordpress:
+    image: wordpress:6.4-apache
+    container_name: wordpress-flutter-hire
+    restart: unless-stopped
+    environment:
+      WORDPRESS_DB_HOST: mysql:3306
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD:-wp_secure_2024_password}
+      WORDPRESS_DB_NAME: wordpress
+      WP_HOME: https://hirededicatedflutterdeveloper.com/cms
+      WP_SITEURL: https://hirededicatedflutterdeveloper.com/cms
+    volumes:
+      - wordpress_data:/var/www/html
+      - ./wordpress/apache-servername.conf:/etc/apache2/conf-available/servername.conf:ro
+    networks:
+      - coolify
+    depends_on:
+      - mysql
+    labels:
+      - "traefik.enable=true"
+      # HTTP router (redirects to HTTPS)
+      - "traefik.http.routers.wordpress-http.rule=Host(`hirededicatedflutterdeveloper.com`) && PathPrefix(`/cms`)"
+      - "traefik.http.routers.wordpress-http.entrypoints=http"
+      - "traefik.http.routers.wordpress-http.middlewares=wordpress-redirect"
+      - "traefik.http.middlewares.wordpress-redirect.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.wordpress-redirect.redirectscheme.permanent=true"
+      
+      # HTTPS router (main router)
+      - "traefik.http.routers.wordpress-https.rule=Host(`hirededicatedflutterdeveloper.com`) && PathPrefix(`/cms`)"
+      - "traefik.http.routers.wordpress-https.entrypoints=https"
+      - "traefik.http.routers.wordpress-https.tls=true"
+      - "traefik.http.routers.wordpress-https.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.wordpress-https.middlewares=wordpress-stripprefix"
+      - "traefik.http.routers.wordpress-https.service=wordpress"
+      - "traefik.http.middlewares.wordpress-stripprefix.stripprefix.prefixes=/cms"
+      - "traefik.http.services.wordpress.loadbalancer.server.port=80"
+      - "traefik.docker.network=coolify"
+
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-flutter-hire
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: ${WORDPRESS_DB_PASSWORD:-wp_secure_2024_password}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root_secure_2024_password}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - coolify
+    command: --default-authentication-plugin=mysql_native_password --innodb-buffer-pool-size=256M --max-connections=100
+
+volumes:
+  wordpress_data:
+  mysql_data:
+
+networks:
+  coolify:
+    external: true
