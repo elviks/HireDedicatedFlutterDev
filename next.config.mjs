@@ -13,10 +13,10 @@ const nextConfig = {
   output: 'standalone',
   async rewrites() {
     return [
-      // Rewrite /cms requests to WordPress container
+      // Rewrite /cms requests to WordPress container (use service name from docker-compose)
       {
         source: '/cms/:path*',
-        destination: 'http://wordpress-flutter-hire/cms/:path*',
+        destination: 'http://wordpress/cms/:path*',
       },
     ]
   },

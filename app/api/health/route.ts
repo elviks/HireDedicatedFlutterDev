@@ -2,8 +2,8 @@ import { NextResponse } from 'next/server'
 
 export async function GET() {
   try {
-    // Test WordPress connection
-    const wordpressUrl = 'http://wordpress-flutter-hire/cms'
+    // Test WordPress connection using service name
+    const wordpressUrl = 'http://wordpress/cms'
     const response = await fetch(wordpressUrl, {
       method: 'HEAD',
     }).catch(() => null)
