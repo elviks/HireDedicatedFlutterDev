@@ -11,6 +11,15 @@ const nextConfig = {
   },
   // Enable standalone output for Docker
   output: 'standalone',
+  async rewrites() {
+    return [
+      // Rewrite /cms requests to WordPress container
+      {
+        source: '/cms/:path*',
+        destination: 'http://wordpress-flutter-hire/cms/:path*',
+      },
+    ]
+  },
   async redirects() {
     return [
       {
