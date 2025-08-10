@@ -1,11 +1,73 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { CheckCircle, Star, Users, Award, Calendar, Phone, Mail } from "lucide-react";
+import { CheckCircle, Star, Users, Award, Calendar, Phone, Mail, Loader2, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
+import { toast } from "sonner";
+
+interface HeroConsultationData {
+     name: string;
+     email: string;
+     company: string;
+     message: string;
+}
 
 export default function HeroSection() {
+     const [formData, setFormData] = useState<HeroConsultationData>({
+          name: "",
+          email: "",
+          company: "",
+          message: "",
+     });
+     const [isSubmitting, setIsSubmitting] = useState(false);
+     const [isSubmitted, setIsSubmitted] = useState(false);
+
+     const handleInputChange = (field: keyof HeroConsultationData, value: string) => {
+          setFormData(prev => ({ ...prev, [field]: value }));
+     };
+
+     const handleSubmit = async (e: React.FormEvent) => {
+          e.preventDefault();
+          setIsSubmitting(true);
+
+          try {
+               const response = await fetch('/api/consultation', {
+                    method: 'POST',
+                    headers: {
+                         'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                         ...formData,
+                         projectType: 'consultation', // Default for hero form
+                         phone: '', // Not collected in hero form
+                    }),
+               });
+
+               const result = await response.json();
+
+               if (response.ok) {
+                    setIsSubmitted(true);
+                    toast.success("Consultation request sent successfully!");
+                    setFormData({
+                         name: "",
+                         email: "",
+                         company: "",
+                         message: "",
+                    });
+               } else {
+                    throw new Error(result.error || 'Failed to send consultation request');
+               }
+          } catch (error) {
+               console.error('Error:', error);
+               toast.error("Failed to send consultation request. Please try again.");
+          } finally {
+               setIsSubmitting(false);
+          }
+     };
+
      return (
           <section className="relative py-20 lg:py-32 bg-gradient-to-br from-blue-50 to-indigo-100 overflow-hidden">
                <div className="container px-4 mx-auto relative z-10">
@@ -115,53 +177,94 @@ export default function HeroSection() {
                          {/* Right Consultation Box */}
                          <div className="lg:flex lg:justify-end">
                               <div className="bg-white rounded-2xl shadow-2xl p-8 border border-gray-100 max-w-md w-full">
-                                   <div className="text-center mb-6">
-                                        <div className="w-16 h-16 bg-gradient-to-r from-indigo-500 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                                             <Calendar className="h-8 w-8 text-white" />
+                                   {isSubmitted ? (
+                                        <div className="text-center">
+                                             <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                                                  <CheckCircle2 className="h-8 w-8 text-white" />
+                                             </div>
+                                             <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                                                  Thank You!
+                                             </h3>
+                                             <p className="text-gray-600 mb-6">
+                                                  Your consultation request has been sent. We'll get back to you within 24 hours.
+                                             </p>
+                                             <Button
+                                                  onClick={() => setIsSubmitted(false)}
+                                                  className="w-full h-12 bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-semibold hover:from-indigo-600 hover:to-blue-600 transition-all shadow-lg"
+                                             >
+                                                  Send Another Request
+                                             </Button>
                                         </div>
-                                        <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                                             Free Consultation
-                                        </h3>
-                                        <p className="text-gray-600">
-                                             Get your project started in 3 days
-                                        </p>
-                                   </div>
+                                   ) : (
+                                        <>
+                                             <div className="text-center mb-6">
+                                                  <div className="w-16 h-16 bg-gradient-to-r from-indigo-500 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                                                       <Calendar className="h-8 w-8 text-white" />
+                                                  </div>
+                                                  <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                                                       Free Consultation
+                                                  </h3>
+                                                  <p className="text-gray-600">
+                                                       Get your project started in 3 days
+                                                  </p>
+                                             </div>
 
-                                   <form className="space-y-4">
-                                        <div>
-                                             <Input
-                                                  type="text"
-                                                  placeholder="Your Name"
-                                                  className="h-12 border-gray-200 focus:border-indigo-500 focus:ring-indigo-500"
-                                             />
-                                        </div>
-                                        <div>
-                                             <Input
-                                                  type="email"
-                                                  placeholder="Email Address"
-                                                  className="h-12 border-gray-200 focus:border-indigo-500 focus:ring-indigo-500"
-                                             />
-                                        </div>
-                                        <div>
-                                             <Input
-                                                  type="text"
-                                                  placeholder="Company Name"
-                                                  className="h-12 border-gray-200 focus:border-indigo-500 focus:ring-indigo-500"
-                                             />
-                                        </div>
-                                        <div>
-                                             <Textarea
-                                                  placeholder="Tell us about your project..."
-                                                  className="min-h-[100px] border-gray-200 focus:border-indigo-500 focus:ring-indigo-500 resize-none"
-                                             />
-                                        </div>
-                                        <Button
-                                             type="submit"
-                                             className="w-full h-12 bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-semibold hover:from-indigo-600 hover:to-blue-600 transition-all shadow-lg"
-                                        >
-                                             Get Free Consultation
-                                        </Button>
-                                   </form>
+                                             <form onSubmit={handleSubmit} className="space-y-4">
+                                                  <div>
+                                                       <Input
+                                                            type="text"
+                                                            placeholder="Your Name"
+                                                            value={formData.name}
+                                                            onChange={(e) => handleInputChange('name', e.target.value)}
+                                                            required
+                                                            className="h-12 border-gray-200 focus:border-indigo-500 focus:ring-indigo-500"
+                                                       />
+                                                  </div>
+                                                  <div>
+                                                       <Input
+                                                            type="email"
+                                                            placeholder="Email Address"
+                                                            value={formData.email}
+                                                            onChange={(e) => handleInputChange('email', e.target.value)}
+                                                            required
+                                                            className="h-12 border-gray-200 focus:border-indigo-500 focus:ring-indigo-500"
+                                                       />
+                                                  </div>
+                                                  <div>
+                                                       <Input
+                                                            type="text"
+                                                            placeholder="Company Name"
+                                                            value={formData.company}
+                                                            onChange={(e) => handleInputChange('company', e.target.value)}
+                                                            className="h-12 border-gray-200 focus:border-indigo-500 focus:ring-indigo-500"
+                                                       />
+                                                  </div>
+                                                  <div>
+                                                       <Textarea
+                                                            placeholder="Tell us about your project..."
+                                                            value={formData.message}
+                                                            onChange={(e) => handleInputChange('message', e.target.value)}
+                                                            required
+                                                            className="min-h-[100px] border-gray-200 focus:border-indigo-500 focus:ring-indigo-500 resize-none"
+                                                       />
+                                                  </div>
+                                                  <Button
+                                                       type="submit"
+                                                       disabled={isSubmitting}
+                                                       className="w-full h-12 bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-semibold hover:from-indigo-600 hover:to-blue-600 transition-all shadow-lg disabled:opacity-50"
+                                                  >
+                                                       {isSubmitting ? (
+                                                            <>
+                                                                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                                                 Sending...
+                                                            </>
+                                                       ) : (
+                                                            "Get Free Consultation"
+                                                       )}
+                                                  </Button>
+                                             </form>
+                                        </>
+                                   )}
 
                                    <div className="mt-6 pt-6 border-t border-gray-100">
                                         <div className="flex items-center justify-center space-x-4 text-sm text-gray-600">

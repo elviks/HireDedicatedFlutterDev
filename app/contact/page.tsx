@@ -1,6 +1,4 @@
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
+import ConsultationForm from "@/app/components/consultation-form";
 import { Mail, Phone, MapPin, Clock } from "lucide-react";
 
 export default function ContactPage() {
@@ -9,75 +7,16 @@ export default function ContactPage() {
                <div className="container px-4 mx-auto relative z-10">
                     <div className="max-w-3xl mx-auto text-center mb-16">
                          <h1 className="text-4xl md:text-5xl font-extrabold mb-4 bg-gradient-to-r from-indigo-500 to-blue-500 bg-clip-text text-transparent">
-                              Contact Us
+                              Get Your Free Consultation
                          </h1>
                          <p className="text-xl text-muted-foreground mb-6">
-                              We’d love to hear from you! Whether you have a
-                              project in mind, need support, or just want to say
-                              hello, our team is here to help you every step of
-                              the way.
+                              Ready to start your Flutter project? Fill out the form below and our team will get back to you within 24 hours with a personalized consultation.
                          </p>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start max-w-5xl mx-auto">
-                         {/* Contact Form */}
-                         <form className="bg-white/80 rounded-2xl shadow-2xl p-8 flex flex-col gap-6 backdrop-blur-lg border border-blue-100 animate-fade-in">
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                   <div className="space-y-2">
-                                        <label
-                                             htmlFor="name"
-                                             className="text-sm font-medium"
-                                        >
-                                             Full Name
-                                        </label>
-                                        <Input
-                                             id="name"
-                                             placeholder="John Doe"
-                                             required
-                                             className="bg-white/80 border border-gray-200 focus:ring-2 focus:ring-primary"
-                                        />
-                                   </div>
-                                   <div className="space-y-2">
-                                        <label
-                                             htmlFor="email"
-                                             className="text-sm font-medium"
-                                        >
-                                             Email Address
-                                        </label>
-                                        <Input
-                                             id="email"
-                                             type="email"
-                                             placeholder="john@example.com"
-                                             required
-                                             className="bg-white/80 border border-gray-200 focus:ring-2 focus:ring-primary"
-                                        />
-                                   </div>
-                              </div>
-                              <div className="space-y-2">
-                                   <label
-                                        htmlFor="message"
-                                        className="text-sm font-medium"
-                                   >
-                                        Message
-                                   </label>
-                                   <Textarea
-                                        id="message"
-                                        placeholder="How can we help you?"
-                                        rows={4}
-                                        required
-                                        className="bg-white/80 border border-gray-200 focus:ring-2 focus:ring-primary"
-                                   />
-                              </div>
-                              <Button
-                                   type="submit"
-                                   className="w-full bg-gradient-to-r from-indigo-500 to-blue-500 text-white shadow-lg hover:from-indigo-600 hover:to-blue-600 transition-all font-bold text-lg py-6 animate-bounce-slow"
-                              >
-                                   Send Message
-                              </Button>
-                              <p className="text-xs text-center text-muted-foreground">
-                                   By submitting this form, you agree to our
-                                   privacy policy and terms of service.
-                              </p>
-                         </form>
+                         {/* Consultation Form */}
+                         <ConsultationForm />
+
                          {/* Company Info & Map */}
                          <div className="flex flex-col gap-8 items-center justify-center animate-fade-in delay-200">
                               <div className="bg-white/80 rounded-xl shadow-xl p-6 w-full border border-blue-100">
@@ -118,10 +57,10 @@ export default function ContactPage() {
                               </div>
                               <div className="text-center mt-4">
                                    <h3 className="text-lg font-bold mb-2 bg-gradient-to-r from-indigo-500 to-blue-500 bg-clip-text text-transparent">
-                                        Let’s Build Something Amazing Together!
+                                        Let's Build Something Amazing Together!
                                    </h3>
                                    <p className="text-muted-foreground max-w-xs mx-auto">
-                                        We’re excited to learn about your
+                                        We're excited to learn about your
                                         project and help you achieve your goals
                                         with Flutter.
                                    </p>
