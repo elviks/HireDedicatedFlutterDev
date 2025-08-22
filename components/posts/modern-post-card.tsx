@@ -30,12 +30,11 @@ export function ModernPostCard({ post }: ModernPostCardProps) {
 
      return (
           <motion.article
-               whileHover={{ y: -8 }}
-               transition={{ duration: 0.3, ease: "easeOut" }}
-               className="group relative h-full"
+               whileHover={{ y: -4 }}
+               transition={{ duration: 0.2, ease: "easeOut" }}
+               className="group h-full"
           >
-               {/* Card Container */}
-               <div className="relative h-full overflow-hidden rounded-xl bg-white border border-gray-200 shadow-sm hover:shadow-xl transition-all duration-300 hover:border-blue-200">
+               <div className="h-full overflow-hidden rounded-lg bg-white border border-gray-200 shadow-sm hover:shadow-md transition-all duration-200">
                     {/* Featured Image */}
                     <div className="relative aspect-[16/9] overflow-hidden bg-gray-100">
                          {featuredImage && !imageError ? (
@@ -43,63 +42,48 @@ export function ModernPostCard({ post }: ModernPostCardProps) {
                                    src={featuredImage.source_url}
                                    alt={featuredImage.alt_text || post.title.rendered}
                                    fill
-                                   className="object-cover transition-transform duration-500 group-hover:scale-105"
+                                   className="object-cover transition-transform duration-300 group-hover:scale-105"
                                    sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1200px) 33vw"
                                    onError={() => setImageError(true)}
                               />
                          ) : (
-                              <div className="flex items-center justify-center h-full bg-gradient-to-br from-blue-50 to-indigo-50">
-                                   <div className="text-center">
-                                        <ImageIcon className="w-12 h-12 text-gray-400 mx-auto mb-2" />
-                                        <p className="text-sm text-gray-500">No image available</p>
-                                   </div>
+                              <div className="flex items-center justify-center h-full bg-gray-100">
+                                   <ImageIcon className="w-12 h-12 text-gray-400" />
                               </div>
                          )}
-
-                         {/* Gradient Overlay */}
-                         <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
                          {/* Category Badge */}
                          {category && (
-                              <motion.div
-                                   initial={{ opacity: 0, scale: 0.8 }}
-                                   animate={{ opacity: 1, scale: 1 }}
-                                   transition={{ duration: 0.3, delay: 0.1 }}
-                                   className="absolute top-4 left-4"
-                              >
-                                   <Link
-                                        href={`/blog/category/${category.slug}`}
-                                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/90 backdrop-blur-sm border border-white/20 text-gray-700 text-xs font-medium hover:bg-white transition-colors cursor-pointer shadow-sm"
-                                   >
+                              <div className="absolute top-3 left-3">
+                                   <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-white/90 backdrop-blur-sm text-gray-700 text-xs font-medium">
                                         <Tag className="w-3 h-3" />
                                         {category.name}
-                                   </Link>
-                              </motion.div>
+                                   </span>
+                              </div>
                          )}
 
-                         {/* Reading Time Badge */}
-                         <div className="absolute top-4 right-4">
-                              <div className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-black/70 backdrop-blur-sm text-white text-xs font-medium">
+                         {/* Reading Time */}
+                         <div className="absolute top-3 right-3">
+                              <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-black/70 backdrop-blur-sm text-white text-xs font-medium">
                                    <Clock className="w-3 h-3" />
                                    {readingTime} min
-                              </div>
+                              </span>
                          </div>
                     </div>
 
                     {/* Content */}
-                    <div className="relative p-6 flex flex-col flex-1">
-                         {/* Meta Information */}
+                    <div className="p-6 flex flex-col h-full">
+                         {/* Meta */}
                          <div className="flex items-center gap-4 text-xs text-gray-500 mb-3">
                               {author && (
-                                   <div className="flex items-center gap-1.5">
-                                        <User className="w-3.5 h-3.5" />
-                                        <span className="font-medium">{author.name}</span>
+                                   <div className="flex items-center gap-1">
+                                        <User className="w-3 h-3" />
+                                        <span>{author.name}</span>
                                    </div>
                               )}
-
-                              <div className="flex items-center gap-1.5">
-                                   <Calendar className="w-3.5 h-3.5" />
-                                   <time dateTime={post.date} className="font-medium">
+                              <div className="flex items-center gap-1">
+                                   <Calendar className="w-3 h-3" />
+                                   <time dateTime={post.date}>
                                         {new Date(post.date).toLocaleDateString("en-US", {
                                              month: "short",
                                              day: "numeric",
@@ -112,7 +96,7 @@ export function ModernPostCard({ post }: ModernPostCardProps) {
                          {/* Title */}
                          <Link href={`/blog/${post.slug}`} className="group/title">
                               <h2
-                                   className="text-xl font-bold text-gray-900 mb-3 line-clamp-2 group-hover/title:text-blue-600 transition-colors duration-300 leading-tight"
+                                   className="text-xl font-semibold text-gray-900 mb-3 line-clamp-2 group-hover/title:text-blue-600 transition-colors"
                                    dangerouslySetInnerHTML={{
                                         __html: post.title.rendered,
                                    }}
@@ -120,25 +104,22 @@ export function ModernPostCard({ post }: ModernPostCardProps) {
                          </Link>
 
                          {/* Excerpt */}
-                         <div className="text-gray-600 text-sm leading-relaxed mb-6 line-clamp-3 flex-1">
-                              {cleanExcerpt.length > 150
-                                   ? `${cleanExcerpt.substring(0, 150)}...`
+                         <div className="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-3 flex-1">
+                              {cleanExcerpt.length > 120
+                                   ? `${cleanExcerpt.substring(0, 120)}...`
                                    : cleanExcerpt
                               }
                          </div>
 
-                         {/* Read More Button */}
+                         {/* Read More */}
                          <Link
                               href={`/blog/${post.slug}`}
-                              className="group/btn inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 text-sm font-semibold transition-colors duration-300 cursor-pointer mt-auto"
+                              className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 text-sm font-medium transition-colors group/btn"
                          >
-                              <span>Read More</span>
-                              <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-1" />
+                              <span>Read more</span>
+                              <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
                          </Link>
                     </div>
-
-                    {/* Hover Border Effect */}
-                    <div className="absolute inset-0 rounded-xl border-2 border-transparent  transition-all duration-300 pointer-events-none" />
                </div>
           </motion.article>
      );

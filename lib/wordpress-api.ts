@@ -43,7 +43,7 @@ export interface WordPressCategory {
   count: number;
 }
 
-const API_BASE_URL = process.env.WORDPRESS_API_URL || 'https://hirededicatedflutterdeveloper.com/cms/wp-json/wp/v2';
+const API_BASE_URL = process.env.WORDPRESS_URL || 'https://cms.hirededicatedflutterdeveloper.com/wp-json/wp/v2';
 
 class WordPressAPI {
   private baseUrl: string;
