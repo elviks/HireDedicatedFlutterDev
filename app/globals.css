@@ -49,6 +49,212 @@
      }
 }
 
+@layer components {
+     /* Enhanced WordPress Content Styles */
+     .enhanced-wordpress-content {
+          color: #374151;
+          line-height: 1.75;
+     }
+
+     .enhanced-wordpress-content table {
+          width: 100%;
+          border-collapse: collapse;
+          background-color: white;
+          border-radius: 0.5rem;
+          overflow: hidden;
+          box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+          margin: 2rem 0;
+     }
+
+     .enhanced-wordpress-content table th {
+          background-color: #f9fafb;
+          border-bottom: 2px solid #e5e7eb;
+          padding: 1rem 1.5rem;
+          text-align: left;
+          font-weight: 600;
+          color: #111827;
+          font-size: 0.75rem;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+     }
+
+     .enhanced-wordpress-content table td {
+          border-bottom: 1px solid #e5e7eb;
+          padding: 1rem 1.5rem;
+          color: #374151;
+          white-space: nowrap;
+     }
+
+     .enhanced-wordpress-content table tr:hover {
+          background-color: #f9fafb;
+          transition: background-color 0.15s;
+     }
+
+     .enhanced-wordpress-content table tr:nth-child(even) {
+          background-color: #fafafa;
+     }
+
+     .enhanced-wordpress-content h1 {
+          font-size: 2.25rem;
+          font-weight: 700;
+          color: #111827;
+          margin-top: 3rem;
+          margin-bottom: 1.5rem;
+          border-bottom: 2px solid #dbeafe;
+          padding-bottom: 0.75rem;
+     }
+
+     .enhanced-wordpress-content h2 {
+          font-size: 1.875rem;
+          font-weight: 700;
+          color: #1e40af;
+          margin-top: 2.5rem;
+          margin-bottom: 1.25rem;
+     }
+
+     .enhanced-wordpress-content h3 {
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: #1f2937;
+          margin-top: 2rem;
+          margin-bottom: 1rem;
+     }
+
+     .enhanced-wordpress-content h4 {
+          font-size: 1.25rem;
+          font-weight: 700;
+          color: #374151;
+          margin-top: 1.5rem;
+          margin-bottom: 0.75rem;
+     }
+
+     .enhanced-wordpress-content p {
+          color: #374151;
+          line-height: 1.75;
+          margin-bottom: 1.5rem;
+          font-size: 1rem;
+     }
+
+     .enhanced-wordpress-content strong,
+     .enhanced-wordpress-content b {
+          font-weight: 600;
+          color: #111827;
+     }
+
+     .enhanced-wordpress-content em,
+     .enhanced-wordpress-content i {
+          font-style: italic;
+          color: #374151;
+     }
+
+     .enhanced-wordpress-content ul {
+          margin: 1.5rem 0;
+          padding-left: 1.5rem;
+     }
+
+     .enhanced-wordpress-content ol {
+          margin: 1.5rem 0;
+          padding-left: 1.5rem;
+          list-style-type: decimal;
+     }
+
+     .enhanced-wordpress-content li {
+          color: #374151;
+          line-height: 1.75;
+          margin-bottom: 0.5rem;
+          list-style-type: disc;
+     }
+
+     .enhanced-wordpress-content ol li {
+          list-style-type: decimal;
+     }
+
+     .enhanced-wordpress-content a {
+          color: #2563eb;
+          text-decoration: underline;
+          font-weight: 500;
+          transition: color 0.2s;
+     }
+
+     .enhanced-wordpress-content a:hover {
+          color: #1d4ed8;
+     }
+
+     .enhanced-wordpress-content blockquote {
+          border-left: 4px solid #3b82f6;
+          background-color: #eff6ff;
+          padding: 1rem 1.5rem;
+          margin: 2rem 0;
+          font-style: italic;
+          color: #374151;
+          border-radius: 0 0.5rem 0.5rem 0;
+     }
+
+     .enhanced-wordpress-content pre {
+          background-color: #111827;
+          color: #f3f4f6;
+          border-radius: 0.5rem;
+          padding: 1.5rem;
+          overflow-x: auto;
+          margin: 1.5rem 0;
+          font-size: 0.875rem;
+     }
+
+     .enhanced-wordpress-content code {
+          background-color: #f3f4f6;
+          border: 1px solid #d1d5db;
+          padding: 0.25rem 0.5rem;
+          border-radius: 0.25rem;
+          font-size: 0.875rem;
+          font-family: ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+          color: #1f2937;
+     }
+
+     .enhanced-wordpress-content pre code {
+          background-color: transparent;
+          border: none;
+          padding: 0;
+          color: #f3f4f6;
+     }
+
+     .enhanced-wordpress-content img {
+          border-radius: 0.5rem;
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+          margin: 2rem auto;
+          max-width: 100%;
+          height: auto;
+          display: block;
+     }
+
+     /* Table wrapper for responsive design */
+     .table-wrapper {
+          overflow-x: auto;
+          margin: 2rem 0;
+          border: 1px solid #e5e7eb;
+          border-radius: 0.5rem;
+          box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+          background-color: white;
+     }
+
+     @media (min-width: 1024px) {
+          .enhanced-wordpress-content h1 {
+               font-size: 3rem;
+          }
+          
+          .enhanced-wordpress-content h2 {
+               font-size: 2.25rem;
+          }
+          
+          .enhanced-wordpress-content h3 {
+               font-size: 1.875rem;
+          }
+          
+          .enhanced-wordpress-content h4 {
+               font-size: 1.5rem;
+          }
+     }
+}
+
 @layer base {
      * {
           @apply border-border;

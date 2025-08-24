@@ -1,8 +1,7 @@
-import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
-import { ModernBlogPostWrapper } from "@/components/modern-blog-post-wrapper";
-import { getPostBySlug } from "@/lib/wordpress";
+import { WordPressPostPage } from "@/components/wordpress-post-page";
+import { getPostBySlug, type WordPressPost } from "@/lib/wordpress-api";
 
 interface BlogPostPageProps {
      params: Promise<{
@@ -10,22 +9,8 @@ interface BlogPostPageProps {
      }>;
 }
 
-// This would typically come from your CMS or database
-type BlogPost = {
-     slug: string;
-     title: string;
-     description: string;
-     content: string;
-     publishedAt: string;
-     author: string;
-     image: string;
-     tags: string[];
-     category?: string;
-     readingTime?: number;
-};
-
 // Fetch blog post data from WordPress API
-async function getBlogPost(slug: string): Promise<BlogPost | null> {
+async function getBlogPost(slug: string): Promise<WordPressPost | null> {
      console.log(`Attempting to fetch blog post with slug: "${slug}"`);
 
      try {
@@ -33,46 +18,14 @@ async function getBlogPost(slug: string): Promise<BlogPost | null> {
           console.log(`Normalized slug: "${normalizedSlug}"`);
 
           const post = await getPostBySlug(normalizedSlug);
-          console.log(
-               `Successfully retrieved post data for slug "${normalizedSlug}"`
-          );
+          
+          if (!post) {
+               console.log(`No post found for slug "${normalizedSlug}"`);
+               return null;
+          }
 
-          const featuredImageUrl =
-               post._embedded?.["wp:featuredmedia"]?.[0]?.source_url || "";
-          console.log(`Featured image URL: ${featuredImageUrl}`);
-
-          const authorName =
-               post._embedded?.["author"]?.[0]?.name || "Unknown Author";
-          console.log(`Author name: ${authorName}`);
-
-          const tags =
-               post._embedded?.["wp:term"]?.[1]?.map((tag: any) => tag.name) ||
-               [];
-          console.log(`Tags: ${tags.join(", ")}`);
-
-          const category =
-               post._embedded?.["wp:term"]?.[0]?.[0]?.name || "General";
-          console.log(`Category: ${category}`);
-
-          const readingTime = Math.ceil(
-               post.content.rendered.replace(/<[^>]*>/g, "").split(" ").length /
-               200
-          );
-
-          return {
-               slug: post.slug,
-               title: post.title.rendered,
-               description:
-                    post.excerpt.rendered.replace(/<[^>]*>/g, "").trim() ||
-                    post.title.rendered,
-               content: post.content.rendered,
-               publishedAt: post.date,
-               author: authorName,
-               image: featuredImageUrl,
-               tags: tags,
-               category: category,
-               readingTime: readingTime,
-          };
+          console.log(`Successfully retrieved post data for slug "${normalizedSlug}"`);
+          return post;
      } catch (error) {
           console.error(`Error fetching blog post with slug "${slug}":`, error);
 
@@ -80,13 +33,6 @@ async function getBlogPost(slug: string): Promise<BlogPost | null> {
                console.error(`Error name: ${error.name}`);
                console.error(`Error message: ${error.message}`);
                console.error(`Error stack: ${error.stack}`);
-
-               if (error.name === "WordPressAPIError") {
-                    console.error(
-                         `WordPress API Error - status: ${(error as any).status
-                         }, endpoint: ${(error as any).endpoint}`
-                    );
-               }
           }
 
           return null;
@@ -106,41 +52,43 @@ export async function generateMetadata({
           };
      }
 
+     const cleanDescription = post.excerpt.rendered.replace(/<[^>]*>/g, "").trim() || 
+                              post.title.rendered;
+     const featuredImage = post._embedded?.["wp:featuredmedia"]?.[0]?.source_url || '';
+
      return {
-          title: `${post.title} | Expert Flutter Development Insights`,
-          description: post.description,
+          title: `${post.title.rendered} | Expert Flutter Development Insights`,
+          description: cleanDescription,
           keywords: [
-               ...post.tags,
                "Flutter",
-               "Dart",
+               "Dart", 
                "cross-platform development",
                "mobile development",
                "app development",
                "UI frameworks",
           ],
           openGraph: {
-               title: post.title,
-               description: post.description,
+               title: post.title.rendered,
+               description: cleanDescription,
                type: "article",
-               publishedTime: post.publishedAt,
-               authors: [post.author],
-               tags: post.tags,
-               images: [
+               publishedTime: post.date,
+               authors: [post._embedded?.author?.[0]?.name || "Unknown Author"],
+               images: featuredImage ? [
                     {
-                         url: post.image,
+                         url: featuredImage,
                          width: 1200,
                          height: 630,
-                         alt: post.title,
+                         alt: post.title.rendered,
                     },
-               ],
+               ] : [],
                siteName: "Hire Flutter Developers",
                locale: "en_US",
           },
           twitter: {
                card: "summary_large_image",
-               title: post.title,
-               description: post.description,
-               images: [post.image],
+               title: post.title.rendered,
+               description: cleanDescription,
+               images: featuredImage ? [featuredImage] : [],
           },
           alternates: {
                canonical: `https://www.hireflutterdeveloper.dev/blog/${post.slug}`,
@@ -156,5 +104,5 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           notFound();
      }
 
-     return <ModernBlogPostWrapper post={post} />;
+     return <WordPressPostPage post={post} />;
 }

@@ -16,6 +16,35 @@ export interface WordPressPost {
   featured_media: number;
   categories: number[];
   tags: number[];
+  // Custom fields for styling
+  meta?: {
+    custom_css?: string;
+    custom_styles?: {
+      h1?: string;
+      h2?: string;
+      h3?: string;
+      h4?: string;
+      h5?: string;
+      h6?: string;
+      p?: string;
+      a?: string;
+      blockquote?: string;
+      table?: string;
+      img?: string;
+      code?: string;
+      pre?: string;
+      ul?: string;
+      ol?: string;
+      li?: string;
+    };
+    theme_colors?: {
+      primary?: string;
+      secondary?: string;
+      accent?: string;
+      background?: string;
+      text?: string;
+    };
+  };
   _embedded?: {
     author?: Array<{
       id: number;
