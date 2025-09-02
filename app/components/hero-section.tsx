@@ -1,89 +1,124 @@
+"use client";
+
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { CheckCircle, Star, Users, Award, Calendar, Phone, Mail } from "lucide-react";
-import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
+import { Star, Calendar, Phone, Mail, CheckCircle, AlertCircle } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 export default function HeroSection() {
+     const [consultationData, setConsultationData] = useState({
+          name: "",
+          email: "",
+          phone: "",
+          company: "",
+          projectDetails: "",
+     });
+     const [isSubmitting, setIsSubmitting] = useState(false);
+     const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
+     const { toast } = useToast();
+
+     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+          const { name, value } = e.target;
+          setConsultationData(prev => ({ ...prev, [name]: value }));
+     };
+
+     const handleConsultationSubmit = async (e: React.FormEvent) => {
+          e.preventDefault();
+          
+          if (!consultationData.name || !consultationData.email || !consultationData.projectDetails) {
+               toast({
+                    title: "Validation Error",
+                    description: "Please fill in all required fields.",
+                    variant: "destructive",
+               });
+               return;
+          }
+
+          setIsSubmitting(true);
+          setSubmitStatus("idle");
+
+          try {
+               const response = await fetch("/api/consultation", {
+                    method: "POST",
+                    headers: {
+                         "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(consultationData),
+               });
+
+               const result = await response.json();
+
+               if (response.ok) {
+                    setSubmitStatus("success");
+                    setConsultationData({ name: "", email: "", phone: "", company: "", projectDetails: "" });
+                    toast({
+                         title: "Consultation Requested!",
+                         description: "We'll schedule a consultation call within 48 hours.",
+                    });
+               } else {
+                    setSubmitStatus("error");
+                    toast({
+                         title: "Error",
+                         description: result.error || "Failed to submit request. Please try again.",
+                         variant: "destructive",
+                    });
+               }
+          } catch (error) {
+               setSubmitStatus("error");
+               toast({
+                    title: "Error",
+                    description: "Network error. Please check your connection and try again.",
+                    variant: "destructive",
+               });
+          } finally {
+               setIsSubmitting(false);
+          }
+     };
+
      return (
-          <section className="relative py-20 lg:py-32 bg-gradient-to-br from-blue-50 to-indigo-100 overflow-hidden">
+          <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-indigo-50 overflow-hidden">
+               {/* Background Elements */}
+               <div className="absolute inset-0 overflow-hidden">
+                    <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-blue-200 to-indigo-300 rounded-full opacity-20 blur-3xl"></div>
+                    <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-tr from-indigo-200 to-purple-300 rounded-full opacity-20 blur-3xl"></div>
+               </div>
+
                <div className="container px-4 mx-auto relative z-10">
-                    <div className="grid lg:grid-cols-2 gap-12 items-center mx-20">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                          {/* Left Content */}
                          <div className="text-center lg:text-left">
-                              <Badge
-                                   variant="secondary"
-                                   className="mb-6 text-base px-5 py-2 rounded-full shadow-lg animate-fade-in"
-                              >
-                                   Trusted by 200+ Clients Worldwide
-                              </Badge>
-
-                              <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-6 leading-tight text-gray-900">
-                                   Hire Dedicated Flutter Developer in Just{" "}
-                                   <span className="bg-gradient-to-r from-indigo-500 to-blue-500 bg-clip-text text-transparent drop-shadow">
-                                        3 Days
-                                   </span>
-                              </h1>
-
-                              <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-3xl lg:max-w-none">
-                                   Scale your business faster by hiring dedicated
-                                   Flutter developers: Rigorously vetted and minimum
-                                   5,000+ hours of experience.
-                              </p>
-
-                              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-12">
-                                   <Button
-                                        size="lg"
-                                        asChild
-                                        className="bg-gradient-to-r from-indigo-500 to-blue-500 text-white shadow-xl hover:from-indigo-600 hover:to-blue-600 transition-all px-8 py-5 text-lg font-semibold"
-                                   >
-                                        <Link href="#contact">
-                                             Request a Free Consultation
-                                        </Link>
-                                   </Button>
-                                   <Button
-                                        size="lg"
-                                        variant="outline"
-                                        asChild
-                                        className="border-primary text-primary hover:bg-primary/10 shadow px-8 py-5 text-lg font-semibold"
-                                   >
-                                        <Link href="#pricing">View Pricing</Link>
-                                   </Button>
+                              <div className="mb-6">
+                                   <Badge className="bg-gradient-to-r from-indigo-500 to-blue-500 text-white border-0 px-4 py-2 text-sm font-medium">
+                                        🚀 Ready to Start in 48 Hours
+                                   </Badge>
                               </div>
 
-                              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
+                              <h1 className="text-4xl md:text-6xl font-extrabold mb-6 leading-tight">
+                                   Hire Expert{" "}
+                                   <span className="bg-gradient-to-r from-indigo-500 to-blue-500 bg-clip-text text-transparent">
+                                        Flutter Developers
+                                   </span>{" "}
+                                   for Your Project
+                              </h1>
+
+                              <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto lg:mx-0">
+                                   Get world-class Flutter development expertise with our pre-vetted developers. 
+                                   Scale your team instantly with zero recruitment fees and guaranteed quality.
+                              </p>
+
+                              <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mb-8 max-w-lg mx-auto lg:mx-0">
                                    <div className="flex flex-col items-center lg:items-start">
                                         <div className="flex items-center mb-2">
-                                             <CheckCircle className="h-5 w-5 text-green-500 mr-2" />
+                                             <Star className="h-5 w-5 text-yellow-500 mr-2" />
                                              <span className="font-semibold">
-                                                  5-Round Vetting
+                                                  5-Star Rating
                                              </span>
                                         </div>
                                         <p className="text-sm text-muted-foreground">
-                                             Top 1% Flutter talent
-                                        </p>
-                                   </div>
-                                   <div className="flex flex-col items-center lg:items-start">
-                                        <div className="flex items-center mb-2">
-                                             <Users className="h-5 w-5 text-blue-500 mr-2" />
-                                             <span className="font-semibold">
-                                                  500+ Projects
-                                             </span>
-                                        </div>
-                                        <p className="text-sm text-muted-foreground">
-                                             Successfully delivered
-                                        </p>
-                                   </div>
-                                   <div className="flex flex-col items-center lg:items-start">
-                                        <div className="flex items-center mb-2">
-                                             <Award className="h-5 w-5 text-purple-500 mr-2" />
-                                             <span className="font-semibold">
-                                                  7+ Years
-                                             </span>
-                                        </div>
-                                        <p className="text-sm text-muted-foreground">
-                                             Flutter expertise
+                                             Client satisfaction
                                         </p>
                                    </div>
                                    <div className="flex flex-col items-center lg:items-start">
@@ -127,23 +162,44 @@ export default function HeroSection() {
                                         </p>
                                    </div>
 
-                                   <form className="space-y-4">
+                                   <form onSubmit={handleConsultationSubmit} className="space-y-4">
                                         <div>
                                              <Input
+                                                  name="name"
+                                                  value={consultationData.name}
+                                                  onChange={handleInputChange}
                                                   type="text"
-                                                  placeholder="Your Name"
+                                                  placeholder="Your Name *"
+                                                  required
                                                   className="h-12 border-gray-200 focus:border-indigo-500 focus:ring-indigo-500"
                                              />
                                         </div>
                                         <div>
                                              <Input
+                                                  name="email"
+                                                  value={consultationData.email}
+                                                  onChange={handleInputChange}
                                                   type="email"
-                                                  placeholder="Email Address"
+                                                  placeholder="Email Address *"
+                                                  required
                                                   className="h-12 border-gray-200 focus:border-indigo-500 focus:ring-indigo-500"
                                              />
                                         </div>
                                         <div>
                                              <Input
+                                                  name="phone"
+                                                  value={consultationData.phone}
+                                                  onChange={handleInputChange}
+                                                  type="tel"
+                                                  placeholder="Phone Number"
+                                                  className="h-12 border-gray-200 focus:border-indigo-500 focus:ring-indigo-500"
+                                             />
+                                        </div>
+                                        <div>
+                                             <Input
+                                                  name="company"
+                                                  value={consultationData.company}
+                                                  onChange={handleInputChange}
                                                   type="text"
                                                   placeholder="Company Name"
                                                   className="h-12 border-gray-200 focus:border-indigo-500 focus:ring-indigo-500"
@@ -151,15 +207,36 @@ export default function HeroSection() {
                                         </div>
                                         <div>
                                              <Textarea
-                                                  placeholder="Tell us about your project..."
+                                                  name="projectDetails"
+                                                  value={consultationData.projectDetails}
+                                                  onChange={handleInputChange}
+                                                  placeholder="Tell us about your project... *"
+                                                  required
                                                   className="min-h-[100px] border-gray-200 focus:border-indigo-500 focus:ring-indigo-500 resize-none"
                                              />
                                         </div>
+
+                                        {/* Status Messages */}
+                                        {submitStatus === "success" && (
+                                             <div className="flex items-center gap-2 text-green-600 bg-green-50 p-3 rounded-lg">
+                                                  <CheckCircle className="h-5 w-5" />
+                                                  <span className="text-sm font-medium">Request submitted successfully!</span>
+                                             </div>
+                                        )}
+                                        
+                                        {submitStatus === "error" && (
+                                             <div className="flex items-center gap-2 text-red-600 bg-red-50 p-3 rounded-lg">
+                                                  <AlertCircle className="h-5 w-5" />
+                                                  <span className="text-sm font-medium">Failed to submit request. Please try again.</span>
+                                             </div>
+                                        )}
+
                                         <Button
                                              type="submit"
-                                             className="w-full h-12 bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-semibold hover:from-indigo-600 hover:to-blue-600 transition-all shadow-lg"
+                                             disabled={isSubmitting}
+                                             className="w-full h-12 bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-semibold hover:from-indigo-600 hover:to-blue-600 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                                         >
-                                             Get Free Consultation
+                                             {isSubmitting ? "Submitting..." : "Get Free Consultation"}
                                         </Button>
                                    </form>
 

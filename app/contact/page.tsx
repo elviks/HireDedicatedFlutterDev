@@ -1,9 +1,81 @@
+"use client";
+
+import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Mail, Phone, MapPin, Clock } from "lucide-react";
+import { Mail, Phone, MapPin, Clock, CheckCircle, AlertCircle } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 export default function ContactPage() {
+     const [formData, setFormData] = useState({
+          name: "",
+          email: "",
+          phone: "",
+          message: "",
+     });
+     const [isSubmitting, setIsSubmitting] = useState(false);
+     const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
+     const { toast } = useToast();
+
+     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+          const { name, value } = e.target;
+          setFormData(prev => ({ ...prev, [name]: value }));
+     };
+
+     const handleSubmit = async (e: React.FormEvent) => {
+          e.preventDefault();
+          
+          if (!formData.name || !formData.email || !formData.message) {
+               toast({
+                    title: "Validation Error",
+                    description: "Please fill in all required fields.",
+                    variant: "destructive",
+               });
+               return;
+          }
+
+          setIsSubmitting(true);
+          setSubmitStatus("idle");
+
+          try {
+               const response = await fetch("/api/contact", {
+                    method: "POST",
+                    headers: {
+                         "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(formData),
+               });
+
+               const result = await response.json();
+
+               if (response.ok) {
+                    setSubmitStatus("success");
+                    setFormData({ name: "", email: "", phone: "", message: "" });
+                    toast({
+                         title: "Message Sent!",
+                         description: "Thank you for contacting us. We'll get back to you within 24 hours.",
+                    });
+               } else {
+                    setSubmitStatus("error");
+                    toast({
+                         title: "Error",
+                         description: result.error || "Failed to send message. Please try again.",
+                         variant: "destructive",
+                    });
+               }
+          } catch (error) {
+               setSubmitStatus("error");
+               toast({
+                    title: "Error",
+                    description: "Network error. Please check your connection and try again.",
+                    variant: "destructive",
+               });
+          } finally {
+               setIsSubmitting(false);
+          }
+     };
+
      return (
           <section className="relative min-h-screen py-20 bg-gradient-to-br from-blue-50 to-indigo-100 overflow-hidden">
                <div className="container px-4 mx-auto relative z-10">
@@ -12,7 +84,7 @@ export default function ContactPage() {
                               Contact Us
                          </h1>
                          <p className="text-xl text-muted-foreground mb-6">
-                              We’d love to hear from you! Whether you have a
+                              We'd love to hear from you! Whether you have a
                               project in mind, need support, or just want to say
                               hello, our team is here to help you every step of
                               the way.
@@ -20,17 +92,20 @@ export default function ContactPage() {
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start max-w-5xl mx-auto">
                          {/* Contact Form */}
-                         <form className="bg-white/80 rounded-2xl shadow-2xl p-8 flex flex-col gap-6 backdrop-blur-lg border border-blue-100 animate-fade-in">
+                         <form onSubmit={handleSubmit} className="bg-white/80 rounded-2xl shadow-2xl p-8 flex flex-col gap-6 backdrop-blur-lg border border-blue-100 animate-fade-in">
                               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                    <div className="space-y-2">
                                         <label
                                              htmlFor="name"
                                              className="text-sm font-medium"
                                         >
-                                             Full Name
+                                             Full Name *
                                         </label>
                                         <Input
                                              id="name"
+                                             name="name"
+                                             value={formData.name}
+                                             onChange={handleInputChange}
                                              placeholder="John Doe"
                                              required
                                              className="bg-white/80 border border-gray-200 focus:ring-2 focus:ring-primary"
@@ -41,43 +116,87 @@ export default function ContactPage() {
                                              htmlFor="email"
                                              className="text-sm font-medium"
                                         >
-                                             Email Address
+                                             Email Address *
                                         </label>
                                         <Input
                                              id="email"
+                                             name="email"
                                              type="email"
+                                             value={formData.email}
+                                             onChange={handleInputChange}
                                              placeholder="john@example.com"
                                              required
                                              className="bg-white/80 border border-gray-200 focus:ring-2 focus:ring-primary"
                                         />
                                    </div>
                               </div>
+                              
+                              <div className="space-y-2">
+                                   <label
+                                        htmlFor="phone"
+                                        className="text-sm font-medium"
+                                   >
+                                        Phone Number
+                                   </label>
+                                   <Input
+                                        id="phone"
+                                        name="phone"
+                                        type="tel"
+                                        value={formData.phone}
+                                        onChange={handleInputChange}
+                                        placeholder="+1 (555) 000-0000"
+                                        className="bg-white/80 border border-gray-200 focus:ring-2 focus:ring-primary"
+                                   />
+                              </div>
+
                               <div className="space-y-2">
                                    <label
                                         htmlFor="message"
                                         className="text-sm font-medium"
                                    >
-                                        Message
+                                        Message *
                                    </label>
                                    <Textarea
                                         id="message"
+                                        name="message"
+                                        value={formData.message}
+                                        onChange={handleInputChange}
                                         placeholder="How can we help you?"
                                         rows={4}
                                         required
                                         className="bg-white/80 border border-gray-200 focus:ring-2 focus:ring-primary"
                                    />
                               </div>
+                              
+                              {/* Status Messages */}
+                              {submitStatus === "success" && (
+                                   <div className="flex items-center gap-2 text-green-600 bg-green-50 p-3 rounded-lg">
+                                        <CheckCircle className="h-5 w-5" />
+                                        <span className="text-sm font-medium">Message sent successfully!</span>
+                                   </div>
+                              )}
+                              
+                              {submitStatus === "error" && (
+                                   <div className="flex items-center gap-2 text-red-600 bg-red-50 p-3 rounded-lg">
+                                        <AlertCircle className="h-5 w-5" />
+                                        <span className="text-sm font-medium">Failed to send message. Please try again.</span>
+                                   </div>
+                              )}
+
                               <Button
                                    type="submit"
-                                   className="w-full bg-gradient-to-r from-indigo-500 to-blue-500 text-white shadow-lg hover:from-indigo-600 hover:to-blue-600 transition-all font-bold text-lg py-6 animate-bounce-slow"
+                                   disabled={isSubmitting}
+                                   className="w-full bg-gradient-to-r from-indigo-500 to-blue-500 text-white shadow-lg hover:from-indigo-600 hover:to-blue-600 transition-all font-bold text-lg py-6 animate-bounce-slow disabled:opacity-50 disabled:cursor-not-allowed"
                               >
-                                   Send Message
+                                   {isSubmitting ? "Sending..." : "Send Message"}
                               </Button>
+                              
                               <p className="text-xs text-center text-muted-foreground">
                                    By submitting this form, you agree to our
                                    privacy policy and terms of service.
                               </p>
                          </form>
+                         
                          {/* Company Info & Map */}
                          <div className="flex flex-col gap-8 items-center justify-center animate-fade-in delay-200">
                               <div className="bg-white/80 rounded-xl shadow-xl p-6 w-full border border-blue-100">
@@ -118,10 +237,10 @@ export default function ContactPage() {
                               </div>
                               <div className="text-center mt-4">
                                    <h3 className="text-lg font-bold mb-2 bg-gradient-to-r from-indigo-500 to-blue-500 bg-clip-text text-transparent">
-                                        Let’s Build Something Amazing Together!
+                                        Let's Build Something Amazing Together!
                                    </h3>
                                    <p className="text-muted-foreground max-w-xs mx-auto">
-                                        We’re excited to learn about your
+                                        We're excited to learn about your
                                         project and help you achieve your goals
                                         with Flutter.
                                    </p>
