@@ -4,7 +4,8 @@ FROM node:18-alpine AS base
 # Make pnpm available in all subsequent layers
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable
+RUN corepack enable && \
+    corepack prepare pnpm@9.1.4 --activate
 
 # Install dependencies only when needed
 FROM base AS deps
