@@ -1,0 +1,19 @@
+# Nixpacks configuration for Next.js with pnpm
+[variables]
+NODE_ENV = "production"
+NEXT_PUBLIC_GA_ID = "G-MHGSBBP95T"
+
+[phases.setup]
+nixPkgs = ["nodejs-18_x", "corepack"]
+
+[phases.install]
+cmds = ["corepack enable pnpm", "pnpm install --frozen-lockfile"]
+
+[phases.build]
+cmds = ["pnpm run build"]
+
+[start]
+cmd = "pnpm start"
+
+[build]
+ignorePkgCache = true

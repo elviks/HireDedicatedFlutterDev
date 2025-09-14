@@ -1,0 +1,6 @@
+# Coolify Configuration
+# Force Coolify to use Docker instead of Nixpacks
+
+build_pack: docker
+dockerfile: Dockerfile
+docker_compose_location: docker-compose.coolify.yml
