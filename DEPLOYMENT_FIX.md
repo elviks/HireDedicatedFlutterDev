@@ -6,6 +6,15 @@
 
 **Error:** `Cannot find matching keyid` during pnpm installation
 
+## ✅ FIXED: Updated Docker & Nixpacks Configuration
+
+**Key Improvements Applied:**
+
+- ✅ **Dockerfile:** Added proper `PNPM_HOME`, `PATH`, and `corepack enable` for reliable pnpm
+- ✅ **pnpm cache:** Using Docker mount cache for faster installs
+- ✅ **nixpacks.toml:** Fixed corepack setup for Nixpacks fallback
+- ✅ **Docker optimization:** Merged RUN commands to reduce layers
+
 ## Immediate Solution ✅
 
 ### Step 1: Force Docker Build in Coolify UI
