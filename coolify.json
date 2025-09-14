@@ -1,0 +1,5 @@
+{
+  "buildpack": "docker",
+  "dockerfile": "Dockerfile",
+  "compose": "docker-compose.coolify.yml"
+}

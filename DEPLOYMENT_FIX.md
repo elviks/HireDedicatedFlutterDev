@@ -1,23 +1,29 @@
 # Coolify Deployment Troubleshooting
 
-## Current Issue
+## Current Issue ❌
 
-The deployment is failing because Coolify is auto-detecting the project as Node.js and using Nixpacks, which is timing out during package installation.
+**Root Cause:** Coolify is ignoring our Docker configuration and still using Nixpacks, which fails with a corepack signature verification error.
 
-## Solution
+**Error:** `Cannot find matching keyid` during pnpm installation
 
-### Option 1: Force Docker Build (Recommended)
+## Immediate Solution ✅
 
-1. **Verify the `.coolify/config` file exists** (already created)
-2. **In Coolify Dashboard:**
-   - Go to your application settings
-   - Under "Build Pack", select "Docker" instead of "Nixpacks"
-   - Set "Dockerfile Path" to: `Dockerfile`
-   - Set "Docker Compose Path" to: `docker-compose.coolify.yml`
+### Step 1: Force Docker Build in Coolify UI
 
-### Option 2: Environment Variables
+**CRITICAL:** You must manually change the build pack in Coolify:
 
-Make sure these environment variables are set in Coolify:
+1. **Go to Coolify Dashboard** → Your Application
+2. **Click "Settings"** or "Configuration"
+3. **Find "Build Pack" or "Build Method"**
+4. **Change from "Nixpacks" to "Docker"**
+5. **Set these paths:**
+   - **Dockerfile Path:** `Dockerfile`
+   - **Docker Compose File:** `docker-compose.coolify.yml`
+6. **Save changes**
+
+### Step 2: Verify Environment Variables
+
+Ensure these are set in Coolify's environment section:
 
 ```
 WORDPRESS_DB_PASSWORD=your_secure_wordpress_password
@@ -25,27 +31,35 @@ MYSQL_ROOT_PASSWORD=your_secure_mysql_root_password
 NEXT_PUBLIC_GA_ID=G-MHGSBBP95T
 ```
 
-### Option 3: Manual Override
+### Step 3: Redeploy
 
-If Coolify still uses Nixpacks, add this to your repository root:
-Create file: `nixpacks.toml`
+After changing to Docker build pack, trigger a new deployment.
 
-```toml
-[variables]
-NODE_ENV = "production"
+## Alternative: Create .coolify File
 
-[build]
-cmd = "pnpm run build"
+If the UI method doesn't work, create this file in your repo root:
 
-[start]
-cmd = "pnpm start"
+**File: `.coolify`**
+
+```json
+{
+  "buildpack": "docker",
+  "dockerfile": "Dockerfile",
+  "compose": "docker-compose.coolify.yml"
+}
 ```
 
-## Verification Steps
+## Why This Happens
 
-1. Check build logs for "Docker" instead of "Nixpacks"
-2. Verify all environment variables are available
-3. Test the GA4 integration after successful deployment
+- Coolify auto-detects `package.json` and defaults to Nixpacks
+- Our `.coolify/config` file format might not be recognized
+- The build pack selection in UI overrides auto-detection
+
+## Expected Success Indicators
+
+✅ Build logs show: `FROM node:18-alpine AS base`
+✅ No mention of "Nixpacks" or "/nix/store" in logs  
+✅ Docker multi-stage build completes successfully
 
 ## Next Steps After Successful Deployment
 

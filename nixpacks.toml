@@ -4,10 +4,13 @@ NODE_ENV = "production"
 NEXT_PUBLIC_GA_ID = "G-MHGSBBP95T"
 
 [phases.setup]
-nixPkgs = ["nodejs-18_x", "corepack"]
+nixPkgs = ["nodejs-18_x"]
 
 [phases.install]
-cmds = ["corepack enable pnpm", "pnpm install --frozen-lockfile"]
+cmds = [
+  "npm install -g pnpm@latest",
+  "pnpm install --frozen-lockfile"
+]
 
 [phases.build]
 cmds = ["pnpm run build"]
