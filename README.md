@@ -27,25 +27,30 @@ Internet → Coolify (SSL Termination) → Nginx Reverse Proxy → Next.js App (
 ## Files Overview
 
 ### Core Files
+
 - `Dockerfile` - Next.js application container
 - `docker-compose.yml` - Standard Docker Compose (for manual deployment)
 - `docker-compose.coolify.yml` - Optimized for Coolify deployment
 - `.env.example` - Environment variables template
 
 ### Nginx Configuration
+
 - `nginx/nginx.conf` - Main Nginx configuration (with SSL)
 - `nginx/default.conf` - Server blocks with SSL (manual deployment)
 - `nginx/coolify-nginx.conf` - Main Nginx config for Coolify
 - `nginx/coolify-default.conf` - Server blocks for Coolify (no SSL needed)
 
 ### WordPress Configuration
+
 - `wordpress/uploads.ini` - PHP upload settings for WordPress
 
 ### Deployment Scripts
+
 - `deploy.sh` - Manual deployment script
 - `setup-ssl.sh` - SSL certificate setup (for manual deployment)
 
 ### API Integration
+
 - `lib/wordpress-api.ts` - WordPress REST API integration utilities
 
 ## Deployment Methods
@@ -53,6 +58,7 @@ Internet → Coolify (SSL Termination) → Nginx Reverse Proxy → Next.js App (
 ### Method 1: Coolify Deployment (Recommended)
 
 #### Step 1: Prepare Environment
+
 1. Create a new project in Coolify
 2. Connect your Git repository
 3. Create environment variables in Coolify dashboard:
@@ -62,17 +68,20 @@ Internet → Coolify (SSL Termination) → Nginx Reverse Proxy → Next.js App (
    ```
 
 #### Step 2: Configure Coolify Application
+
 1. **Application Type**: Docker Compose
 2. **Docker Compose File**: Use `docker-compose.coolify.yml`
 3. **Domain**: `hirededicatedflutterdeveloper.com`
 4. **SSL**: Enable automatic SSL (Let's Encrypt)
 
 #### Step 3: Deploy
+
 1. Push your code to the connected repository
 2. Coolify will automatically build and deploy your application
 3. SSL certificates will be automatically provisioned
 
 #### Step 4: WordPress Setup
+
 1. Access `https://hirededicatedflutterdeveloper.com/cms/wp-admin/`
 2. Complete WordPress installation
 3. Configure your WordPress site
@@ -80,6 +89,7 @@ Internet → Coolify (SSL Termination) → Nginx Reverse Proxy → Next.js App (
 ### Method 2: Manual Docker Deployment
 
 #### Step 1: Server Setup
+
 ```bash
 # Update system
 sudo apt update && sudo apt upgrade -y
@@ -95,6 +105,7 @@ sudo chmod +x /usr/local/bin/docker-compose
 ```
 
 #### Step 2: Clone and Configure
+
 ```bash
 # Clone repository
 git clone <your-repository-url>
@@ -106,6 +117,7 @@ nano .env  # Edit with your secure passwords
 ```
 
 #### Step 3: Deploy
+
 ```bash
 # Make scripts executable
 chmod +x deploy.sh setup-ssl.sh
@@ -120,35 +132,39 @@ chmod +x deploy.sh setup-ssl.sh
 ## WordPress Integration
 
 ### API Endpoints
+
 Your Next.js app can access WordPress data via:
+
 - Posts: `/cms/wp-json/wp/v2/posts`
 - Categories: `/cms/wp-json/wp/v2/categories`
 - Media: `/cms/wp-json/wp/v2/media`
 
 ### Using the WordPress API
+
 ```typescript
-import { getAllPosts, getPostBySlug } from '@/lib/wordpress-api';
+import { getAllPosts, getPostBySlug } from "@/lib/wordpress-api";
 
 // Get all posts
 const posts = await getAllPosts();
 
 // Get specific post
-const post = await getPostBySlug('my-post-slug');
+const post = await getPostBySlug("my-post-slug");
 ```
 
 ### Example Blog Integration
+
 Update your blog pages to fetch from WordPress:
 
 ```typescript
 // app/blog/page.tsx
-import { getAllPosts } from '@/lib/wordpress-api';
+import { getAllPosts } from "@/lib/wordpress-api";
 
 export default async function BlogPage() {
   const posts = await getAllPosts({ per_page: 10 });
-  
+
   return (
     <div>
-      {posts.map(post => (
+      {posts.map((post) => (
         <article key={post.id}>
           <h2>{post.title.rendered}</h2>
           <div dangerouslySetInnerHTML={{ __html: post.excerpt.rendered }} />
@@ -162,7 +178,9 @@ export default async function BlogPage() {
 ## Configuration Details
 
 ### Nginx Reverse Proxy
+
 The nginx configuration handles:
+
 - SSL termination (manual deployment)
 - Request routing based on path
 - WordPress URL rewriting
@@ -171,12 +189,14 @@ The nginx configuration handles:
 - CORS headers for API access
 
 ### WordPress Configuration
+
 - Configured for subdirectory installation (`/cms`)
 - Proper SSL handling with proxy headers
 - Increased upload limits (100MB)
 - Security headers and file blocking
 
 ### Database
+
 - MySQL 8.0 with native password authentication
 - Persistent data storage with Docker volumes
 - Optimized for WordPress performance
@@ -192,6 +212,7 @@ The nginx configuration handles:
 ## Monitoring and Maintenance
 
 ### View Logs
+
 ```bash
 # All services
 docker-compose logs -f
@@ -203,6 +224,7 @@ docker-compose logs -f nginx
 ```
 
 ### Restart Services
+
 ```bash
 # Restart all
 docker-compose restart
@@ -212,6 +234,7 @@ docker-compose restart wordpress
 ```
 
 ### Update Application
+
 ```bash
 # Pull latest code
 git pull origin main
@@ -223,6 +246,7 @@ docker-compose up -d
 ```
 
 ### Database Backup
+
 ```bash
 # Create backup
 docker-compose exec mysql mysqldump -u root -p wordpress > backup_$(date +%Y%m%d_%H%M%S).sql
@@ -236,15 +260,18 @@ docker-compose exec -i mysql mysql -u root -p wordpress < backup_file.sql
 ### Common Issues
 
 1. **WordPress redirects to wrong URL**
+
    - Check `WP_HOME` and `WP_SITEURL` in WordPress admin
    - Verify nginx proxy headers
 
 2. **SSL certificate issues** (Manual deployment)
+
    - Ensure domain DNS is pointed to server
    - Check if ports 80 and 443 are open
    - Verify certbot logs: `docker-compose logs certbot`
 
 3. **Database connection issues**
+
    - Verify environment variables
    - Check MySQL logs: `docker-compose logs mysql`
    - Ensure MySQL is fully started before WordPress
@@ -265,6 +292,7 @@ docker-compose exec -i mysql mysql -u root -p wordpress < backup_file.sql
 ## Development
 
 ### Local Development
+
 ```bash
 # Start development environment
 docker-compose -f docker-compose.yml up -d
@@ -276,16 +304,79 @@ docker-compose -f docker-compose.yml up -d
 ```
 
 ### Environment Variables
+
 Create `.env` file with:
+
 ```
 WORDPRESS_DB_PASSWORD=secure_password_here
 MYSQL_ROOT_PASSWORD=secure_root_password_here
 NODE_ENV=production
+NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
 ```
+
+## Google Analytics 4 (GA4) Integration
+
+This project includes Google Analytics 4 integration using the official Next.js third-parties package.
+
+### Setup
+
+1. **Install package** (already included):
+
+   ```bash
+   pnpm add @next/third-parties
+   ```
+
+2. **Configure environment variables**:
+
+   - Update `.env.local` with your GA4 Measurement ID:
+
+   ```
+   NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
+   ```
+
+   - Find your Measurement ID in GA4: Admin → Data streams → Web → your stream
+
+3. **Integration is automatic** - GA4 tracking is loaded on every page via `app/layout.tsx`
+
+### Event Tracking
+
+Use the provided helper for custom event tracking:
+
+```typescript
+import { track } from "@/app/_components/ga";
+
+// Example: Track lead generation
+<button onClick={() => track("generate_lead", { location: "hero" })}>
+  Get a Flutter Quote
+</button>;
+
+// Example: Track form submissions
+const handleSubmit = () => {
+  track("form_submit", {
+    form_type: "contact",
+    location: "footer",
+  });
+};
+```
+
+### GA4 Configuration
+
+1. **Enable SPA tracking**: In GA4 Admin → Data streams → Web → Enhanced measurement → Enable "Page changes based on browser history events"
+
+2. **Mark key events**: Admin → Data display → Events → Toggle `generate_lead` and other important events as Key Events for conversion tracking
+
+3. **Debug events**: Use Admin → Data display → DebugView to verify events during development
+
+### Resources
+
+- [Next.js Third-parties Documentation](https://nextjs.org/docs/app/building-your-application/optimizing/third-party-libraries)
+- [GoogleAnalytics Component](https://nextjs.org/docs/app/api-reference/components/third-party/google-analytics)
+- [GA4 Event Helper](https://nextjs.org/docs/app/building-your-application/optimizing/third-party-libraries#google-analytics)
 
 ## Support
 
 For issues and questions:
+
 1. Check the troubleshooting section
 2. Review Docker and nginx logs
 3. Verify DNS and SSL configuration
