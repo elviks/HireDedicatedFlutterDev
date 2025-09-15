@@ -1,16 +1,15 @@
-# Nixpacks configuration for Next.js with pnpm via corepack
+# Nixpacks configuration with Node 20 + pinned pnpm to fix corepack signature issues
 [variables]
 NODE_ENV = "production"
 NEXT_PUBLIC_GA_ID = "G-MHGSBBP95T"
-PNPM_HOME = "/pnpm"
-PATH = "$PNPM_HOME:$PATH"
 
 [phases.setup]
-nixPkgs = ["nodejs-18_x"]
+nixPkgs = ["nodejs"]
 
 [phases.install]
 cmds = [
   "corepack enable",
+  "corepack prepare pnpm@9.12.0 --activate",
   "pnpm install --frozen-lockfile"
 ]
 
@@ -19,6 +18,3 @@ cmds = ["pnpm run build"]
 
 [start]
 cmd = "pnpm start"
-
-[build]
-ignorePkgCache = true

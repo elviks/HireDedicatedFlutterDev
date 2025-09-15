@@ -1,0 +1,57 @@
+# Fix B: Custom Dockerfile with Node 20 + pinned pnpm
+FROM node:20-alpine AS base
+
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+ENV COREPACK_NPM_REGISTRY=https://registry.npmjs.org
+
+RUN apk add --no-cache libc6-compat && \
+    corepack enable && \
+    corepack prepare pnpm@9.12.0 --activate && \
+    pnpm --version
+
+# Install dependencies only when needed
+FROM base AS deps
+WORKDIR /app
+
+# Install dependencies
+COPY package.json pnpm-lock.yaml* ./
+RUN --mount=type=cache,id=pnpm-store,target=/pnpm/store pnpm install --frozen-lockfile
+
+# Rebuild the source code only when needed
+FROM base AS builder
+WORKDIR /app
+
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+
+# Build the application
+RUN --mount=type=cache,id=pnpm-store,target=/pnpm/store pnpm run build
+
+# Production image, copy all the files and run next
+FROM base AS runner
+WORKDIR /app
+
+ENV NODE_ENV=production
+
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 nextjs
+
+COPY --from=builder /app/public ./public
+
+# Set the correct permission for prerender cache
+RUN mkdir .next && \
+    chown nextjs:nodejs .next
+
+# Automatically leverage output traces to reduce image size
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+USER nextjs
+
+EXPOSE 3008
+
+ENV PORT=3008
+ENV HOSTNAME="0.0.0.0"
+
+CMD ["node", "server.js"]
